@@ -75,7 +75,7 @@ sap.ui.define([
 				
 				this.setProperty("value",fValue,true);
 				
-				this.getAggregation("_label").setText(oResourceBundle.getText("productRatingLabelFinal",[fValue,oEvent.getSource().getMaxValue()]));
+				this.getAggregation("_label").setText(oResourceBundle.getText("productRatingLabelIndicator",[fValue,oEvent.getSource().getMaxValue()]));
 				this.getAggregation("_label").setDesign("Bold");
 			
 			},
