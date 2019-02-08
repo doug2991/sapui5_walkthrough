@@ -10,7 +10,9 @@ sap.ui.define([
 				properties : {
 					value : {
 						type : "float",
-						defaultValue : "0"
+						defaultValue : 0
+						}
+					
 					},
 					aggregations : {
 						_rating : {
@@ -19,8 +21,11 @@ sap.ui.define([
 						_label : {
 							type : "sap.m.Label" , multiple : false, visibility: "hidden"
 						},
-						_button : "sap.m.Label", multiple : false, visibility: "hidden"
-					},
+						_button : {
+							type : "sap.m.Button", multiple : false, visibility: "hidden"
+						}
+							
+						},
 					events: {
 						change : {
 							parameters : {
@@ -31,7 +36,6 @@ sap.ui.define([
 							}
 						}
 					}
-				}
 			},
 			init : function() {
 				this.setAggregation("_rating",new RatingIndicator({
@@ -67,14 +71,25 @@ sap.ui.define([
 			
 			_onRate : function(oEvent){
 				var oResourceBundle = this.getModel("i18n").getResourceBundle();
-				this.getAggregation("_rating").setEnabled(false);
-				this.getAggregation("_label").setText(oResourceBundle.getText("productRatingLabelFinal"));
-				this.getAggregation("_button").setEnabled(false);
-				this.fireEvent("change",{
-					value : this.getValue()	
-				});
+				var fValue = oEvent.getParameter("value");
+				
+				this.setProperty("value",fValue,true);
+				
+				this.getAggregation("_label").setText(oResourceBundle.getText("productRatingLabelFinal",[fValue,oEvent.getSource().getMaxValue()]));
+				this.getAggregation("_label").setDesign("Bold");
+			
 			},
 			
+			_onSubmit : function (oEvent) {
+			var oResourceBundle = this.getModel("i18n").getResourceBundle();
+
+			this.getAggregation("_rating").setEnabled(false);
+			this.getAggregation("_label").setText(oResourceBundle.getText("productRatingLabelFinal"));
+			this.getAggregation("_button").setEnabled(false);
+			this.fireEvent("change", {
+				value: this.getValue()
+			});
+		},
 			renderer : function(oRM,oControl) {
 				oRM.write("<div");
 				oRM.writeControlData(oControl);
